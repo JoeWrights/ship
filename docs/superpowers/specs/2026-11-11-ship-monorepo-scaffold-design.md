@@ -83,7 +83,7 @@ ship/
 | turbo | ^2.6.3 | 2.11.10 | `^2.11.10` | 同大版本 |
 | @biomejs/biome | ^2.3.10 | 2.6.6 | `^2.6.6` | 同大版本 |
 | @changesets/cli | ^2.27.1 | 3.0.3 | `^3.0.3` | **跨大版本**，故配置改用 `init` 生成（见 §8） |
-| @rspress/core | ^2.0.8 | 2.1.1（`latest`） | `^2.1.1` | v2 文档站包名是 `@rspress/core`，`rspress` 本体停在 `latest-v1` = 1.47.2，**不可误装** |
+| @rspress/core | ^2.0.8 | 2.1.1（`latest`） | `^2.1.1` | v2 文档站包名是 `@rspress/core`，`rspress` 本体停在 `latest-v1` = 1.47.2，**不可误装**；已核实其 `bin.rspress` 存在，所以 `rspress dev/build/preview` 可用 |
 | typescript | ^5.9.3 | `latest`=7.0.2；5.x 最高 5.9.3；6.0.3 存在 | `^5.9.3` | `tsc` 是打包器，需产出行为可预期；7.x 的 `latest` 实为 `7.1.0-dev.*` 预览线 |
 | @types/node | ^20.11.30 | `latest`=26.6.6；20.x 最高 20.19.43 | `^20.19.43` | 本机 runtime 为 node v20.20.2，类型要跟 runtime 主版本 |
 | husky | ^9.1.7 | 9.1.7 | `^9.1.7` | 一致 |
@@ -203,7 +203,9 @@ export function isNonEmptyString(value: unknown): value is string {
 
 born 引用了 `logo.svg` 与 `logo-with-title.svg` 两个图片资源，ship 只提供**一个**手写最小占位 `docs/public/logo.svg` 并且只引用它，避免文档站起步即带 404 资源请求。
 
-`route.excludeSources: ["**/superpowers/**"]`：`docs/` 同时是 rspress 的 `root`，若不排除，内部设计文档会被编译进公开站点。实施时须验证该选项在当前 `@rspress/core` 2.1.1 下确实生效（以 `doc_build/` 内不出现 superpowers 页面为准）。
+`route.exclude: ["**/superpowers/**"]`：`docs/` 同时是 rspress 的 `root`，若不排除，内部设计文档会被编译进公开站点。
+
+键名已对 `@rspress/shared@2.1.1` 的 `RouteOptions` 核实：v2 里这个键叫 **`exclude`**，**没有 `excludeSources`**。后者是 rspress 1.x 的旧名，写错不会报错，只会静默不生效 —— 所以不能只写配置就认为完成了，生效与否以 `doc_build/` 内不出现 superpowers 页面为准。
 
 内容：`index.mdx` 用 `pageType: home` 的 hero + features；`guide/introduction.mdx` 说明定位与结构；`guide/quick-start.mdx` 写这套架子**真实可用**的命令（install / build:packages / changeset / docs:dev），使文档站第一天就有可查内容。
 
@@ -243,7 +245,7 @@ born 引用了 `logo.svg` 与 `logo-with-title.svg` 两个图片资源，ship �
 | 5 | `pnpm lint:ci` | 退出码 0 |
 | 6 | `pnpm typecheck` | 退出码 0 |
 | 7 | `pnpm docs:build` | 产出 `doc_build/`，且其中不含 superpowers 内部文档 |
-| 8 | `pnpm changeset` | 能列出 3 个包且无 schema 报错 |
+| 8 | `pnpm exec changeset add --empty` 与 `pnpm exec changeset status` | 前者成功生成 changeset 文件（证明 CLI 与 v3 config schema 可用），后者无 schema 报错。**不跑 `changeset version`** —— 它会改写版本号与生成 CHANGELOG，污染干净架子 |
 
 ## 11. 相对 born 的偏离汇总
 
