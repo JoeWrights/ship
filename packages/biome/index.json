@@ -15,7 +15,8 @@
             "!**/output",
             "!**/doc_build",
             "!**/.husky",
-            "!**/docs/superpowers"
+            "!**/docs/superpowers",
+            "!**/.changeset/*.md"
         ]
     },
     "linter": {
