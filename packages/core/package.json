@@ -1,0 +1,32 @@
+{
+    "name": "@joewrights/core",
+    "version": "0.0.0",
+    "description": "Sample library proving the ship build pipeline",
+    "license": "MIT",
+    "type": "commonjs",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "require": "./dist/index.js",
+            "import": "./dist/index.js"
+        }
+    },
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "dev": "tsc --watch",
+        "build": "tsc -p tsconfig.json",
+        "clean": "rm -rf dist tsconfig.tsbuildinfo",
+        "typecheck": "tsc -p tsconfig.json --noEmit"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "devDependencies": {
+        "@joewrights/tsconfig": "workspace:*",
+        "typescript": "^5.9.3"
+    }
+}
