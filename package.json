@@ -1,0 +1,48 @@
+{
+    "name": "ship",
+    "version": "0.0.0",
+    "private": true,
+    "description": "A turbo + pnpm monorepo scaffold",
+    "type": "commonjs",
+    "packageManager": "pnpm@10.14.0",
+    "engines": {
+        "node": ">=20",
+        "pnpm": ">=10"
+    },
+    "scripts": {
+        "prepare": "husky",
+        "lint": "biome check --write .",
+        "lint:ci": "biome ci .",
+        "typecheck": "turbo run typecheck --filter='@joewrights/*'",
+        "dev:packages": "turbo run dev --filter='@joewrights/*'",
+        "build:packages": "turbo run build --filter='@joewrights/*'",
+        "clean:packages": "turbo run clean --filter='@joewrights/*'",
+        "changeset": "changeset",
+        "changeset:version": "changeset version",
+        "prerelease": "pnpm build:packages",
+        "release": "changeset publish",
+        "docs:dev": "rspress dev",
+        "docs:build": "rspress build",
+        "docs:preview": "rspress preview"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "^2.6.6",
+        "@changesets/cli": "^3.0.3",
+        "@joewrights/biome": "workspace:*",
+        "@joewrights/tsconfig": "workspace:*",
+        "@rspress/core": "^2.1.1",
+        "@types/node": "^20.19.43",
+        "husky": "^9.1.7",
+        "turbo": "^2.11.10",
+        "typescript": "^5.9.3"
+    },
+    "keywords": [
+        "monorepo",
+        "turbo",
+        "pnpm",
+        "rspress",
+        "changesets",
+        "biome"
+    ],
+    "license": "MIT"
+}
