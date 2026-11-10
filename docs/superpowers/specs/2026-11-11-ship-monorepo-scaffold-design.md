@@ -82,7 +82,7 @@ ship/
 | --- | --- | --- | --- | --- |
 | turbo | ^2.6.3 | 2.11.10 | `^2.11.10` | 同大版本 |
 | @biomejs/biome | ^2.3.10 | 2.6.6 | `^2.6.6` | 同大版本 |
-| @changesets/cli | ^2.27.1 | 3.0.3 | `^3.0.3` | **跨大版本**，故配置改用 `init` 生成（见 §8） |
+| @changesets/cli | ^2.27.1 | 3.0.3 | `^2.31.1` | **不跟 latest**：3.x 的 `engines.node` 是 `^22.11 \|\| ^24 \|\| >=26`，在 node 20 上 `changeset init` 直接抛 `TypeError: enableCompileCache is not a function`。其 bin 用 `process.getBuiltinModule` 做版本保护，但该 API 在 node 20.11+ 已被回移存在，保护形同虚设。教训：选型不能只看 registry latest，必须逐项核对 `engines` 与本机 runtime —— 这正是本文档为 `@types/node` 挑主版本时用的同一把尺子 |
 | @rspress/core | ^2.0.8 | 2.1.1（`latest`） | `^2.1.1` | v2 文档站包名是 `@rspress/core`，`rspress` 本体停在 `latest-v1` = 1.47.2，**不可误装**；已核实其 `bin.rspress` 存在，所以 `rspress dev/build/preview` 可用 |
 | typescript | ^5.9.3 | `latest`=7.0.2；5.x 最高 5.9.3；6.0.3 存在 | `^5.9.3` | `tsc` 是打包器，需产出行为可预期；7.x 的 `latest` 实为 `7.1.0-dev.*` 预览线 |
 | @types/node | ^20.11.30 | `latest`=26.6.6；20.x 最高 20.19.43 | `^20.19.43` | 本机 runtime 为 node v20.20.2，类型要跟 runtime 主版本 |
@@ -211,7 +211,7 @@ born 引用了 `logo.svg` 与 `logo-with-title.svg` 两个图片资源，ship �
 
 ## 8. changesets 配置
 
-`.changeset/config.json` 通过 `pnpm changeset init` 生成后再改，**不抄 born 的**：ship 装的是 changesets v3，手写 v2 schema 存在字段不匹配风险。
+`.changeset/config.json` 通过 `pnpm changeset init` 生成后再改，**不抄 born 的**：让工具自己产出当前版本认得的 schema，比人工对齐字段名可靠。
 
 生成后修改两项：
 
@@ -245,7 +245,7 @@ born 引用了 `logo.svg` 与 `logo-with-title.svg` 两个图片资源，ship �
 | 5 | `pnpm lint:ci` | 退出码 0 |
 | 6 | `pnpm typecheck` | 退出码 0 |
 | 7 | `pnpm docs:build` | 产出 `doc_build/`，且其中不含 superpowers 内部文档 |
-| 8 | `pnpm exec changeset add --empty` 与 `pnpm exec changeset status` | 前者成功生成 changeset 文件（证明 CLI 与 v3 config schema 可用），后者无 schema 报错。**不跑 `changeset version`** —— 它会改写版本号与生成 CHANGELOG，污染干净架子 |
+| 8 | `pnpm exec changeset add --empty` 与 `pnpm exec changeset status` | 前者成功生成 changeset 文件（证明 CLI 与当前版本的 config schema 可用），后者无 schema 报错。**不跑 `changeset version`** —— 它会改写版本号与生成 CHANGELOG，污染干净架子。执行中发现：包相对 `main` 有变更而无版本意图时 `changeset status` 会退码 1（信息性错误，非配置错误），故仓库保留一个空 changeset 使这条检查可通过 |
 
 ## 11. 相对 born 的偏离汇总
 
@@ -258,7 +258,10 @@ born 引用了 `logo.svg` 与 `logo-with-title.svg` 两个图片资源，ship �
 | 包 `test` 脚本 | `echo "Error..." && exit 1` | 不预置 | **修 bug**：避免 `turbo run test` 永久红灯 |
 | `access` | `restricted` | `public` | 必要（公共 npm scoped 包） |
 | workspace glob | `packages/**` + `examples/**` | 仅 `packages/**` | 精简（不指向空目录） |
-| changeset 配置来源 | 手写 | `init` 生成后改 | 稳健（跨 v2→v3 大版本） |
+| changeset 配置来源 | 手写 | `init` 生成后改 | 稳健（让工具产出自己认得的 schema） |
+| biome 规则集开关 | `linter.rules.recommended: true` | `linter.rules.preset: "recommended"` | **修隐患**：2.6.6 下 `recommended` 已标 DEPRECATED；`biome migrate` 报"无需迁移"是因为它只检查根配置、不检查被 `extends` 引入的包配置，故需手动迁移。已实测 `preset` 既能反序列化又真启用规则 |
+| biome 扫描范围 | — | 排除 `!**/docs/superpowers` | 精简：内部设计与计划文档会被格式化改写，制造与交付无关的 diff 噪声 |
+| biome 扫描范围 | — | 排除 `!**/.changeset/*.md` | **修冲突**：changesets 生成的 frontmatter 是 `---` 紧接 `---`，biome 的 Markdown formatter 要求其间有空行。不排除则每个开发者跑完 `changeset add` 都会被 pre-commit 拦下 |
 
 ## 12. 后续路线（本次不做）
 
