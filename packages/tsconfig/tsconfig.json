@@ -9,7 +9,7 @@
         "strictNullChecks": true,
         "isolatedModules": true,
         "verbatimModuleSyntax": false,
-        "useDefineForClassFields": true,
+        "useDefineForClassFields": false,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "esModuleInterop": true,

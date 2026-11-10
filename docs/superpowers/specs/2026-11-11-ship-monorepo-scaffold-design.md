@@ -262,6 +262,7 @@ born 引用了 `logo.svg` 与 `logo-with-title.svg` 两个图片资源，ship �
 | biome 规则集开关 | `linter.rules.recommended: true` | `linter.rules.preset: "recommended"` | **修隐患**：2.6.6 下 `recommended` 已标 DEPRECATED；`biome migrate` 报"无需迁移"是因为它只检查根配置、不检查被 `extends` 引入的包配置，故需手动迁移。已实测 `preset` 既能反序列化又真启用规则 |
 | biome 扫描范围 | — | 排除 `!**/docs/superpowers` | 精简：内部设计与计划文档会被格式化改写，制造与交付无关的 diff 噪声 |
 | biome 扫描范围 | — | 排除 `!**/.changeset/*.md` | **修冲突**：changesets 生成的 frontmatter 是 `---` 紧接 `---`，biome 的 Markdown formatter 要求其间有空行。不排除则每个开发者跑完 `changeset add` 都会被 pre-commit 拦下 |
+| `useDefineForClassFields` | `true`（born 的 `nest.json` 与 `experimentalDecorators: true` **并存**） | base 钉 `false` | **继承 bug 修正**（评审发现）：`true` 时装饰器装上的 accessor 会被实例自有字段遮蔽，不报错、直接失效。已实测对照：同一段代码 `true` 输出 `x`（accessor 未执行），`false` 输出 `[via-accessor]`。本节 §6 声明要为框架项目保留装饰器能力，则该开关必须是 `false` |
 
 ## 12. 后续路线（本次不做）
 

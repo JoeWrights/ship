@@ -33,8 +33,11 @@ docs/          文档站内容（superpowers/ 为内部设计与计划，不进�
 ## 约定
 
 - 包作用域 `@joewrights/*`，公共 npm registry。
-- 库产物 CJS 优先，由包内 `"type": "commonjs"` 决定；转 ESM 只翻这一个字段。
+- 库产物 CJS 优先，由包内 `"type": "commonjs"` 决定。只有一个文件的包转 ESM 确实只翻这一个字段；多文件包还要给所有相对 import 补 `.js` 后缀，否则在 `module: NodeNext` 下报 `ERR_MODULE_NOT_FOUND`。
+- `exports` 的 `import` condition 当前也指向 CJS 产物。`core` 只有 `export function` 形式的直导，能被 `cjs-module-lexer` 静态识别，ESM 具名导入可用；包一旦改成 barrel re-export（`export * from ...`），这条路会断，届时需产出双格式。
 - 不要开启 `verbatimModuleSyntax`，它与 CJS 产出冲突（base 里已钉 `false`）。
+- `useDefineForClassFields` 在 base 里钉 `false`。它是 `true` 时，`experimentalDecorators` 装饰器装上的 accessor 会被实例自有字段遮蔽 —— 不报错，装饰器直接失效。只要基础库还想支持装饰器（TypeORM / NestJS 这类），就不能改回 `true`。
+- 类型配置选择：对外发布的库用 `@joewrights/tsconfig/library.json`（产出 `.d.ts`）；不对外的服务端包用 `node.json`（`declaration: false`）。目前无包消费 `node.json`，它是预设而非死配置。
 - 缩进 4 空格，来自 `.editorconfig`，biome 通过 `useEditorconfig` 读取。
 - 新加业务包需备齐 `build` / `dev` / `clean` / `typecheck` 四个脚本，否则会被 `turbo run <task>` 静默跳过。
 
