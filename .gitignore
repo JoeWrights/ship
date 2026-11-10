@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist
+lib
+esm
+
+# Turbo
+.turbo
+*.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+
+# rspress build output
+doc_build/
+
+# Test coverage
+coverage/
