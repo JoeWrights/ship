@@ -1,0 +1,13 @@
+{
+    "name": "@joewrights/biome",
+    "version": "0.0.0",
+    "description": "Shared Biome config for the ship monorepo",
+    "license": "MIT",
+    "main": "index.json",
+    "files": [
+        "index.json"
+    ],
+    "publishConfig": {
+        "access": "public"
+    }
+}

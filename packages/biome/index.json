@@ -1,0 +1,106 @@
+{
+    "$schema": "https://biomejs.dev/schemas/2.6.6/schema.json",
+    "vcs": {
+        "enabled": true,
+        "clientKind": "git",
+        "useIgnoreFile": true
+    },
+    "files": {
+        "ignoreUnknown": false,
+        "includes": [
+            "**",
+            "!**/node_modules",
+            "!**/dist",
+            "!**/build",
+            "!**/output",
+            "!**/doc_build",
+            "!**/.husky"
+        ]
+    },
+    "linter": {
+        "enabled": true,
+        "rules": {
+            "recommended": true,
+            "correctness": {
+                "noUnusedVariables": {
+                    "level": "warn",
+                    "fix": "none"
+                },
+                "noUnusedImports": {
+                    "level": "warn"
+                },
+                "noUnusedFunctionParameters": {
+                    "level": "warn"
+                },
+                "noUnusedPrivateClassMembers": {
+                    "level": "warn"
+                },
+                "noUnusedLabels": "warn"
+            },
+            "style": {
+                "useConst": "warn",
+                "useNamingConvention": {
+                    "level": "warn",
+                    "fix": "none",
+                    "options": {
+                        "strictCase": false,
+                        "conventions": [
+                            {
+                                "selector": {
+                                    "kind": "enumMember"
+                                },
+                                "formats": [
+                                    "CONSTANT_CASE",
+                                    "camelCase",
+                                    "PascalCase"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "useImportType": "off",
+                "noNamespace": "warn"
+            },
+            "suspicious": {
+                "noExplicitAny": "warn",
+                "noFallthroughSwitchClause": "error"
+            },
+            "complexity": {
+                "noForEach": "off",
+                "noStaticOnlyClass": "off",
+                "noUselessConstructor": "warn"
+            }
+        }
+    },
+    "assist": {
+        "enabled": true,
+        "actions": {
+            "source": {
+                "organizeImports": {
+                    "level": "on"
+                }
+            }
+        }
+    },
+    "formatter": {
+        "enabled": true,
+        "useEditorconfig": true,
+        "indentStyle": "space",
+        "indentWidth": 4
+    },
+    "javascript": {
+        "formatter": {
+            "quoteStyle": "double",
+            "jsxQuoteStyle": "double",
+            "quoteProperties": "asNeeded",
+            "trailingCommas": "es5",
+            "semicolons": "asNeeded",
+            "arrowParentheses": "always",
+            "bracketSpacing": true,
+            "bracketSameLine": false
+        },
+        "parser": {
+            "unsafeParameterDecoratorsEnabled": true
+        }
+    }
+}
