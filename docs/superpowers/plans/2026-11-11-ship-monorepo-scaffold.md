@@ -6,7 +6,7 @@
 
 **Architecture:** 根目录持有全部工具链与文档站配置，`packages/` 下三个 workspace 包（两个纯配置包 `tsconfig`/`biome` 作为唯一约定来源，一个示例库 `core` 用 tsc 产出 CJS + 声明文件以证明任务图真实可用）。库产物走 CJS，日后可单包翻 `type` 字段迁 ESM。
 
-**Tech Stack:** turborepo 2.11、pnpm 10.14 workspace、TypeScript 5.9 `tsc`、@rspress/core 2.1、@changesets/cli 3.0、@biomejs/biome 2.6、husky 9。
+**Tech Stack:** turborepo 2.11、pnpm 10.14 workspace、TypeScript 5.9 `tsc`、@rspress/core 2.1、@changesets/cli 2.31、@biomejs/biome 2.6、husky 9。
 
 **规格来源：** [2026-11-11-ship-monorepo-scaffold-design.md](../specs/2026-11-11-ship-monorepo-scaffold-design.md)
 
@@ -587,7 +587,7 @@ git commit -m "feat(core): add sample library exercising tsc build"
     },
     "devDependencies": {
         "@biomejs/biome": "^2.6.6",
-        "@changesets/cli": "^3.0.3",
+        "@changesets/cli": "^2.31.1",
         "@joewrights/biome": "workspace:*",
         "@joewrights/tsconfig": "workspace:*",
         "@rspress/core": "^2.1.1",
@@ -867,7 +867,9 @@ pnpm exec changeset init
 
 Expected: 退出码 0，生成 `.changeset/config.json`。
 
-必须走 `init` 而不是照抄 born 的 `.changeset/config.json`：ship 装的是 `@changesets/cli` 3.0，born 那份是 2.x 的 schema，手抄有字段对不上且 init 不会覆盖已有文件的风险。
+必须走 `init` 而不是照抄 born 的 `.changeset/config.json`：让工具自己产出当前版本认得的 schema，比人工对齐字段名可靠（born 那份是手写的，字段容易与新版 schema 对不上）。
+
+> **执行期阻塞与修正（已实际遇到）：** 本任务原计划装 registry latest 的 `@changesets/cli@3.0.3`，在 node v20.20.2 上跑 `changeset init` 直接抛 `TypeError: enableCompileCache is not a function` —— 3.x 的 `engines.node` 是 `^22.11 || ^24 || >=26`。其 bin 用 `process.getBuiltinModule` 做版本保护，但该 API 已被回移到 node 20.11+，保护形同虚设。重跑时直接装 `^2.31.1`，并逐项核对其余依赖的 `engines` 与本机 runtime（已核：biome `>=14.21.3`、`@rspress/core` `^20.19.0||>=22.12.0`、typescript `>=14.17`、husky `>=18` 均满足）。
 
 - [ ] **Step 2: 只改两个字段，保留 init 产出的其余结构**
 
