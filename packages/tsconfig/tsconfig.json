@@ -1,0 +1,28 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "display": "Base",
+    "compilerOptions": {
+        "target": "ES2022",
+        "lib": [
+            "ES2023"
+        ],
+        "strict": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "isolatedModules": true,
+        "verbatimModuleSyntax": false,
+        "useDefineForClassFields": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipLibCheck": true,
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "noEmitOnError": true,
+        "removeComments": false
+    }
+}

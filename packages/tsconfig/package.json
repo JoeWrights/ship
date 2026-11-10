@@ -1,0 +1,12 @@
+{
+    "name": "@joewrights/tsconfig",
+    "version": "0.0.0",
+    "description": "Shared TypeScript configs for the ship monorepo",
+    "license": "MIT",
+    "files": [
+        "*.json"
+    ],
+    "publishConfig": {
+        "access": "public"
+    }
+}
