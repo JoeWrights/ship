@@ -1,0 +1,24 @@
+# 简介
+
+ship 是一个 monorepo 基础架子，目标是把六件工具的接线方式固定下来，让后续加业务包只需要复制目录结构。
+
+## 目录结构
+
+| 路径              | 职责                                                          |
+| ----------------- | ------------------------------------------------------------- |
+| `packages/tsconfig` | `@joewrights/tsconfig`，共享类型配置：base / library / node 三档 |
+| `packages/biome`  | `@joewrights/biome`，唯一 lint 与格式化约定来源               |
+| `packages/core`   | `@joewrights/core`，示例库，用于证明构建链路可用              |
+| `docs`            | rspress 文档站内容，站点配置在仓库根的 `rspress.config.ts`    |
+
+## 约定
+
+- **包作用域**：一律 `@joewrights/*`，公共 npm registry，不使用私有源。
+- **模块格式**：CJS 优先。库包 `package.json` 显式写 `"type": "commonjs"`，配合 `module: NodeNext` 产出 CommonJS。日后要把某个包转 ESM，只需翻该包自己的 `type` 字段。
+- **禁止开启 `verbatimModuleSyntax`**：它与 CJS 产出冲突。`@joewrights/tsconfig` 的 base 里已显式写 `false` 兜住。
+- **缩进**：4 空格，来自 `.editorconfig`，biome 通过 `useEditorconfig` 读取。
+- **新加业务包**：在 `packages/` 下建目录，`tsconfig.json` 继承 `@joewrights/tsconfig/library.json`，`package.json` 备齐 `build` / `dev` / `clean` / `typecheck` 四个脚本，即可被 `--filter='@joewrights/*'` 覆盖。
+
+## 当前边界
+
+架子阶段**没有**测试框架、CI 流水线、`examples/` 可运行示例，也没有真实业务模块。`turbo.json` 里保留了 `test` 任务定义但各包不预置 `test` 脚本，避免一开箱就红灯。

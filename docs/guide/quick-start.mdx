@@ -1,0 +1,54 @@
+# 快速开始
+
+## 环境要求
+
+node 20（见 `.nvmrc`）、pnpm 10.14（见根 `package.json` 的 `packageManager`）。
+
+注意 `@changesets/cli` 锁在 2.x：3.x 的 `engines.node` 是 `^22.11 || ^24 || >=26`，在 node 20 上其 bin 会因 `module.enableCompileCache` 不存在而崩溃。升级 changesets 前要先升 node。
+
+## 安装
+
+```bash
+pnpm install
+```
+
+安装时根脚本 `prepare: husky` 会自动接管 git hooks，因此**必须先 `git init` 再安装**，否则安装中断。
+
+## 构建
+
+```bash
+pnpm build:packages
+```
+
+产物在 `packages/<name>/dist`。重复执行时第二次会命中 turbo 缓存（输出里出现 `FULL TURBO`）。
+
+## 类型检查与 lint
+
+```bash
+pnpm typecheck    # 逐包 tsc --noEmit
+pnpm lint         # biome check --write，会改写文件
+pnpm lint:ci      # biome ci，只读，pre-commit 跑的就是这个
+```
+
+## 本地开发
+
+```bash
+pnpm dev:packages   # tsc --watch
+pnpm docs:dev       # 文档站开发服务器
+```
+
+## 清理
+
+```bash
+pnpm clean:packages   # 删除各包 dist；turbo 不缓存该任务，每次都会真的执行
+```
+
+## 发版流程
+
+```bash
+pnpm changeset          # 交互式选择变更的包与 bump 级别，生成 .changeset/*.md
+pnpm changeset:version  # 消费 changeset，改写版本号与 CHANGELOG
+pnpm release            # prerelease 先全量构建，再 changeset publish
+```
+
+`access` 已设为 `public`，scoped 包发布到公共 npm 后可被正常安装。

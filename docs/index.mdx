@@ -1,0 +1,27 @@
+---
+pageType: home
+hero:
+  name: Ship
+  text: Ship it.
+  tagline: 基于 turbo + pnpm 的 monorepo 基础架子
+  actions:
+    - theme: brand
+      text: 快速开始
+      link: /guide/quick-start
+    - theme: alt
+      text: 简介
+      link: /guide/introduction
+features:
+  - title: 任务图与缓存
+    details: turborepo 按依赖顺序调度 build / dev / typecheck，命中缓存的任务直接跳过
+  - title: tsc 直接产出
+    details: 不引入额外打包器，TypeScript 编译器负责 JS 与声明文件产出
+  - title: 约定集中
+    details: tsconfig 与 biome 规则各自独立成包，全仓单一事实来源
+  - title: 版本可追溯
+    details: changesets 管理多包版本与 changelog，发布前构建由 prerelease 保证
+  - title: 文档即代码
+    details: rspress 站点与代码同仓，改完实现顺手改文档
+  - title: 提交即检查
+    details: pre-commit 跑只读检查，不把未格式化内容送进历史
+---
