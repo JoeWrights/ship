@@ -3,9 +3,7 @@
     "display": "Base",
     "compilerOptions": {
         "target": "ES2022",
-        "lib": [
-            "ES2023"
-        ],
+        "lib": ["ES2023"],
         "strict": true,
         "noImplicitAny": true,
         "strictNullChecks": true,

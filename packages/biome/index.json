@@ -14,13 +14,14 @@
             "!**/build",
             "!**/output",
             "!**/doc_build",
-            "!**/.husky"
+            "!**/.husky",
+            "!**/docs/superpowers"
         ]
     },
     "linter": {
         "enabled": true,
         "rules": {
-            "recommended": true,
+            "preset": "recommended",
             "correctness": {
                 "noUnusedVariables": {
                     "level": "warn",
