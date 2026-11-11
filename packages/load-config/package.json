@@ -1,0 +1,36 @@
+{
+    "name": "@joewrights/load-config",
+    "version": "0.0.0",
+    "description": "Load configuration from local json files or a remote Apollo service",
+    "license": "MIT",
+    "type": "commonjs",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "require": "./dist/index.js",
+            "import": "./dist/index.js"
+        }
+    },
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "dev": "tsc --watch",
+        "build": "tsc -p tsconfig.json",
+        "clean": "rm -rf dist tsconfig.tsbuildinfo",
+        "typecheck": "tsc -p tsconfig.json --noEmit"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "dependencies": {
+        "chalk": "^4.1.2"
+    },
+    "devDependencies": {
+        "@joewrights/tsconfig": "workspace:*",
+        "@types/node": "^20.19.43",
+        "typescript": "^5.9.3"
+    }
+}

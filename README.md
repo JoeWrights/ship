@@ -39,6 +39,7 @@ docs/          文档站内容（superpowers/ 为内部设计与计划，不进�
 - `useDefineForClassFields` 在 base 里钉 `false`。它是 `true` 时，`experimentalDecorators` 装饰器装上的 accessor 会被实例自有字段遮蔽 —— 不报错，装饰器直接失效。只要基础库还想支持装饰器（TypeORM / NestJS 这类），就不能改回 `true`。
 - 类型配置选择：对外发布的库用 `@joewrights/tsconfig/library.json`（产出 `.d.ts`）；不对外的服务端包用 `node.json`（`declaration: false`）。目前无包消费 `node.json`，它是预设而非死配置。
 - 缩进 4 空格，来自 `.editorconfig`，biome 通过 `useEditorconfig` 读取。
+- 本工作区已置 `prettier.enable: false`。原因：用户级开了 `editor.formatOnSave`，而 biome 支持的语言里没有 `mdx`，被 `files.includes` 排除的 `docs/superpowers/**` 也不会被 biome 处理 —— 这两类文件会落到 Prettier 手里。Prettier 3 默认读 `.editorconfig`，它对本仓库 markdown 的改写包含两处实质损坏：把 `` `examples/**` `` 转义成 `` `examples/\*\*` ``（行内代码里反斜杠是字面量），以及给 markdown 里的 JSON 示例补行尾逗号（示例随即变成非法 JSON）。代价：`.mdx` 在本工作区不再有保存格式化（biome 干不了，比损坏好）。
 - 新加业务包需备齐 `build` / `dev` / `clean` / `typecheck` 四个脚本，否则会被 `turbo run <task>` 静默跳过。
 
 ## 版本约束
@@ -49,4 +50,4 @@ docs/          文档站内容（superpowers/ 为内部设计与计划，不进�
 
 ## 设计文档
 
-决策依据与偏离 born 的理由见 `docs/superpowers/specs/`，实施步骤见 `docs/superpowers/plans/`。
+决策依据的理由见 `docs/superpowers/specs/`，实施步骤见 `docs/superpowers/plans/`。
